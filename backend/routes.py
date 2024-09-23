@@ -19,8 +19,8 @@ def create_staff():
         
         required_fields =["name", "role", "description", "gender"]
         for field in required_fields:
-            if field not in data:
-                return jsonify({"error": f"Missing required field: {field}"})
+            if field not in data or not data.get(field):
+                return jsonify({"error": f"Missing required field: {field}"}), 400
         
         name = data.get("name")
         role = data.get("role")
@@ -39,7 +39,7 @@ def create_staff():
         db.session.add(new_staff)
         db.session.commit()
         
-        return jsonify({"msg":"Staff created successfully"}),201
+        return jsonify(new_staff.to_json()), 201
     
     except Exception as e:
         db.session.rollback()
@@ -56,10 +56,10 @@ def update_staff(id):
 
         data = request.json
         
-        staff.name = data.get("name", friend.name)
-        staff.role = data.get("role", friend.role)
-        staff.description = data.get("description", friend.description)
-        staff.gender = data.get("gender", friend.gender)
+        staff.name = data.get("name", staff.name)
+        staff.role = data.get("role", staff.role)
+        staff.description = data.get("description", staff.description)
+        staff.gender = data.get("gender", staff.gender)
         
         db.session.commit()
         return jsonify(staff.to_json()),200

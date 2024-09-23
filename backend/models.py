@@ -12,7 +12,8 @@ class Staff(db.Model):
     def to_json(self):
         return {
             "id": self.id,
-            "role": self.name,
+            "name": self.name,
+            "role": self.role,
             "description": self.description,
             "gender": self.gender,
             "imgUrl": self.img_url,
